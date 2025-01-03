@@ -51,7 +51,7 @@ uses: actions/checkout@v3
    cat ~/.ssh/known_hosts # Debug : Vérifiez les hôtes connus
 
 - name: Deploy to VPS
-uses: your-username/your-action-repo@v1
+uses: fabienOVH/action-deploy-vps-ovhcloud@v1.0.0
 with:
 ssh_host: ${{ secrets.SSH_HOST }}
 ssh_user: ${{ secrets.SSH_USER }}
