@@ -23,7 +23,7 @@ jobs:
         cat ~/.ssh/known_hosts # Debug : Vérifiez les hôtes connus
 
     - name: Deploy to VPS
-      uses: fabienOVH/ovhcloud-vps-deploy-action@v1.0.0
+      uses: fabienOVH/action-deploy-vps-ovhcloud@v1.0.0
       with:
         ssh_host: ${{ secrets.SSH_HOST }}
         ssh_user: ${{ secrets.SSH_USER }}
