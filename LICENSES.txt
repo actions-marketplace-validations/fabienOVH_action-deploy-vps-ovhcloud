@@ -1,0 +1,20 @@
+Licences:
+MIT
+BSD-3-Clause
+Unlicense
+
+Packages:
+@actions/core; MIT
+@actions/exec; MIT
+@actions/http-client; MIT
+@actions/io; MIT
+@fastify/busboy; MIT
+bcrypt-pbkdf; BSD-3-Clause
+buildcheck; MIT
+cpu-features; MIT
+nan; MIT
+safer-buffer; MIT
+ssh2; MIT
+tunnel; MIT
+tweetnacl; Unlicense
+undici; MIT
