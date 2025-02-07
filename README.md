@@ -26,37 +26,45 @@ Before you begin, make sure that:
 Create a file `.github/workflows/deploy.yml' in your GitHub repository and add the following example:
 
 ```yaml
-name: Deploy to VPS
+name: Test OVHcloud Deploy Action
 
 on:
-push:
-branches:
-- hand
+  push:
+    branches:
+      - main
 
 jobs:
-deploy:
-runs-on: ubuntu-latest
+  deploy:
+    runs-on: ubuntu-latest
 
-steps:
-- name: Checkout code
-uses: actions/checkout@v3
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-- name: Add SSH Private Key
-  run: |
-   mkdir -p ~/.ssh
-   echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-   chmod 600 ~/.ssh/id_rsa
-   ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-   cat ~/.ssh/id_rsa # Debug : Vérifiez que la clé est correcte
-   cat ~/.ssh/known_hosts # Debug : Vérifiez les hôtes connus
+    - name: Check if VPS is up
+      run: |
+        echo "Checking if VPS is reachable..."
+        if ! nc -zvw3 ${{ secrets.SSH_HOST }} 22; then
+          echo "VPS is down or unreachable. Stopping deployment."
+          exit 1
+        fi
+        echo "VPS is online, proceeding with deployment."
 
-- name: Deploy to VPS
-uses: fabienOVH/action-deploy-vps-ovhcloud@v1.0.0
-with:
-ssh_host: ${{ secrets.SSH_HOST }}
-ssh_user: ${{ secrets.SSH_USER }}
-ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-site_path: /var/www/html
+    - name: Add SSH Private Key
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+    - name: Deploy to VPS
+      uses: fabienOVH/action-deploy-vps-ovhcloud@v1.0.0
+      with:
+        ssh_host: ${{ secrets.SSH_HOST }}
+        ssh_user: ${{ secrets.SSH_USER }}
+        ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+        site_path: /var/www/html
+      continue-on-error: true
 ```
 
 ### 2. Configure GitHub secrets
