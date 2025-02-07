@@ -15,6 +15,7 @@ jobs:
 
     - name: Check if VPS is up
       run: |
+        echo "SSH_HOST is set to: ${{ secrets.SSH_HOST }}"
         echo "Checking if VPS is reachable..."
         if ! nc -zvw3 ${{ secrets.SSH_HOST }} 22; then
           echo "VPS is down or unreachable. Stopping deployment."
